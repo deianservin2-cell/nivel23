@@ -44,7 +44,7 @@ class $modify(PlayLayer) {
     }
 };
 
-// Agrega la pagina de Explorers justo despues de Dash.
+// Mete Explorers en la lista de niveles del selector, despues de Dash.
 class $modify(LevelSelectLayer) {
     bool init(int page) {
         if (!LevelSelectLayer::init(page)) return false;
@@ -52,10 +52,19 @@ class $modify(LevelSelectLayer) {
         auto lvl = LevelTools::getLevel(NEW_ID, true);
         if (lvl && m_scrollLayer) {
             lvl->retain();
-            auto newPage = LevelPage::create(lvl);
-            int index = std::min(22, m_scrollLayer->getTotalPages());
-            m_scrollLayer->addPage(newPage, index);
+            auto sl = m_scrollLayer;
+            log::info("[Explorers] dynamic={} objetos={} paginas={}",
+                sl->m_dynamic,
+                sl->m_dynamicObjects ? (int)sl->m_dynamicObjects->count() : -1,
+                sl->getTotalPages());
+
+            if (sl->m_dynamic && sl->m_dynamicObjects) {
+                int idx = std::min<int>(22, sl->m_dynamicObjects->count());
+                sl->m_dynamicObjects->insertObject(lvl, idx);
+                sl->updatePages();
+            }
         }
+        Notification::create("Explorers hook OK", NotificationIcon::Success)->show();
         return true;
     }
 };
