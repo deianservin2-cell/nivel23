@@ -1,0 +1,10 @@
+{
+  "geode": "5.0.0",
+  "gd": { "win": "2.208", "android": "2.208" },
+  "id": "tunombre.nivel23",
+  "name": "Nivel 23",
+  "version": "v1.0.0",
+  "developer": "tunombre",
+  "description": "Agrega un nuevo nivel principal despues de Dash.",
+  "resources": { "files": ["resources/nivel.txt"] }
+}
