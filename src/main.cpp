@@ -14,7 +14,7 @@ class $modify(LevelTools) {
         auto lvl = GJGameLevel::create();
         lvl->m_levelID = NEW_ID;
         lvl->m_levelName = "Explorers";
-        lvl->m_levelType = GJLevelType::Local;
+        lvl->m_levelType = static_cast<GJLevelType>(1);
 
         // Se MUESTRA como demon de 17 estrellas
         lvl->m_stars = FAKE_STARS;
