@@ -20,7 +20,7 @@ class $modify(LevelTools) {
         lvl->m_stars = FAKE_STARS;
         lvl->m_demon = true;
         lvl->m_difficulty = GJDifficulty::Demon;
-        lvl->m_demonDifficulty = 0; // 0 = hard demon (ajustar si queres otro)
+        lvl->m_demonDifficulty = 0;
 
         if (loadString) {
             auto path = Mod::get()->getResourcesDir() / "nivel.txt";
@@ -31,8 +31,7 @@ class $modify(LevelTools) {
     }
 };
 
-// Al completar, ponemos las estrellas en 0 un instante para que NO
-// se den estrellas, orbes ni diamantes, y las restauramos despues.
+// Al completar, estrellas en 0 un instante para que NO den recompensas.
 class $modify(PlayLayer) {
     void levelComplete() {
         if (m_level && m_level->m_levelID == NEW_ID) {
@@ -45,10 +44,18 @@ class $modify(PlayLayer) {
     }
 };
 
+// Agrega la pagina de Explorers justo despues de Dash.
 class $modify(LevelSelectLayer) {
     bool init(int page) {
         if (!LevelSelectLayer::init(page)) return false;
-        // TODO: agregar la pagina 23 al m_scrollLayer (copiar estilo de Dash)
+
+        auto lvl = LevelTools::getLevel(NEW_ID, true);
+        if (lvl && m_scrollLayer) {
+            lvl->retain();
+            auto newPage = LevelPage::create(lvl);
+            int index = std::min(22, m_scrollLayer->getTotalPages());
+            m_scrollLayer->addPage(newPage, index);
+        }
         return true;
     }
 };
